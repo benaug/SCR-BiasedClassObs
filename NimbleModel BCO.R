@@ -21,9 +21,17 @@ NimModel <- nimbleCode({
     y[i,1:J] ~ dBernoulliVector(pd=pd[i,1:J],K1D=K1D[1:J],z=z[i]) #vectorized obs mod
   }
   #Class observation process
-  for(i in 1:n){
+  for(i in 1:n){ #for captured individuals
     for(j in 1:J){
       y.obs.class[i,j] ~ dbinom(size=y[i,j],prob=p.obs.class[classes[i]])
     }
+  }
+  #Class-specific abundances are derived parameters.
+  #N.class is recomputed every time an individual class is proposed. (only 1 time per N/z update, once per iteration)
+  #This can be slow, turn off if not needed.
+  #Or monitor z and classes and compute post-MCMC. I would do the latter.
+  for(c in 1:n.class){
+    N.class[c] <- sum((z[1:M]==1)*(classes[1:M]==c)) #realized class abundance
+    # E.class[c] <- lambda*pi.class[c] #expected class abundance, easy to compute post-MCMC, not doing it here.
   }
 })

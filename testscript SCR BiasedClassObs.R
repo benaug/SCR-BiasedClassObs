@@ -13,7 +13,7 @@ nimbleOptions(determinePredictiveNodesInModel = FALSE)
 
 #simulate some data
 n.class <- 2 #how many classes
-pi.class <- c(0.45,0.55) #class frequencies
+pi.class <- c(0.35,0.65) #class frequencies
 p.obs.class <- c(0.5,0.9) #class observation probabilities|capture
 p0 <- c(0.05,0.3) #class-specific p0
 sigma <- c(1,0.5) #class-specific sigma
@@ -79,7 +79,7 @@ y.obs.class2D <- apply(data$y.obs.class,c(1,2),sum)
 Nimdata <- list(y=nimbuild$y,y.obs.class=y.obs.class2D,z=z.data,X=nimbuild$X,classes=class.data)
 
 # set parameters to monitor
-parameters<-c('lambda','p0','sigma','N','D',"pi.class","p.obs.class")
+parameters<-c('lambda','p0','sigma','N','D',"pi.class","p.obs.class","N.class")
 
 nt <- 1 #thinning rate
 
@@ -98,6 +98,10 @@ y.nodes <- Rmodel$expandNodeNames(paste("y[1:",M,",1:",J,"]"))
 pd.nodes <- Rmodel$expandNodeNames(paste("pd[1:",M,",1:",J,"]"))
 N.node <- Rmodel$expandNodeNames("N")
 z.nodes <- Rmodel$expandNodeNames(paste("z[1:",M,"]"))
+#If computing N.class during MCMC use this
+N.class.nodes <- Rmodel$expandNodeNames("N.class")
+calcNodes <- c(N.node,y.nodes,pd.nodes,N.class.nodes)
+#Otherwise, use this
 calcNodes <- c(N.node,y.nodes,pd.nodes)
 conf$addSampler(target = c("N"),
                 type = 'zSampler',control = list(inds.detected=1:nimbuild$n,z.ups=z.ups,J=J,M=M,
@@ -137,6 +141,7 @@ end.time-start.time2 # post-compilation run time
 
 library(coda)
 mvSamples = as.matrix(Cmcmc$mvSamples)
-plot(mcmc(mvSamples[2:nrow(mvSamples),]))
+plot(mcmc(mvSamples[25:nrow(mvSamples),]))
 
 data$N #realized N target
+table(data$class) #realized class-specific N target

@@ -66,7 +66,7 @@ N.init <- sum(nimbuild$z.init)
 class.init <- sample(1:n.class,M,replace=TRUE)
 class.init[fixed.class] <- class.data[fixed.class]
 
-Niminits <- list(z=nimbuild$z.init,s=nimbuild$s.init,classes=class.init,
+Niminits <- list(z=nimbuild$z.init,s=nimbuild$s.init,Class=class.init,
                  p0=c(0.1,0.1),sigma=c(1,1),N=N.init,D=0.5)
 
 #constants for Nimble
@@ -75,8 +75,8 @@ constants <- list(M=M,J=J,K1D=K1D,xlim=nimbuild$xlim,ylim=nimbuild$ylim,area=are
 
 #supply data to nimble
 y.obs.class2D <- apply(data$y.obs.class,c(1,2),sum)
-#note, using "classes" instead of "class" in nimble. Using the latter wouldn't compile for some reason.
-Nimdata <- list(y=nimbuild$y,y.obs.class=y.obs.class2D,z=z.data,X=nimbuild$X,classes=class.data)
+#note, using "Class" instead of "class" in nimble. "class" is reserved in c++, so won't compile
+Nimdata <- list(y=nimbuild$y,y.obs.class=y.obs.class2D,z=z.data,X=nimbuild$X,Class=class.data)
 
 # set parameters to monitor
 parameters<-c('lambda','p0','sigma','N','D',"pi.class","p.obs.class","N.class")

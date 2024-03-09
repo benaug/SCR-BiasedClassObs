@@ -30,6 +30,13 @@ lambda
 
 data <- sim.SCR.BCO(D=D,p0=p0,sigma=sigma,pi.class=pi.class,p.obs.class=p.obs.class,
                     K=K,X=X,buff=buff)
+
+#Must record this data. n x J x K binary indicator
+#for whether the category level was observed for each capture event
+#in y. #y.obs.class[i,j,k] is always 0 if y[i,j,k]=0
+str(data$y.obs.class)
+
+
 #total individual caps
 rowSums(data$y)
 #total individual class observations

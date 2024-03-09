@@ -15,11 +15,11 @@ nimbleOptions(determinePredictiveNodesInModel = FALSE)
 n.class <- 2 #how many classes
 pi.class <- c(0.45,0.55) #class frequencies
 p.obs.class <- c(0.5,0.9) #class observation probabilities|capture
-p0 <- c(0.05,0.3)
-sigma <- c(1,0.5)
+p0 <- c(0.05,0.3) #class-specific p0
+sigma <- c(1,0.5) #class-specific sigma
 if(!(length(pi.class)==n.class&length(p0)==n.class&length(sigma)==n.class))stop("pi.class, p0, and sigma must be of length n.class")
 
-K <- 5
+K <- 5 #number of occasions
 buff <- 3 #state space buffer. Should be at least 3 sigma.
 X <- as.matrix(expand.grid(3:11,3:11)) #trapping array
 
@@ -57,7 +57,7 @@ J <- nimbuild$J
 K1D <- rep(K,J) #trap operation
 
 #get class data
-fixed.class <- which(rowSums(data$y.obs.class)>0)
+fixed.class <- which(rowSums(data$y.obs.class)>0) #only need to observe an individual's class 1 time
 class.data <- rep(NA,M)
 class.data[fixed.class] <- data$class.obs[fixed.class]
 
@@ -67,7 +67,7 @@ class.init <- sample(1:n.class,M,replace=TRUE)
 class.init[fixed.class] <- class.data[fixed.class]
 
 Niminits <- list(z=nimbuild$z.init,s=nimbuild$s.init,classes=class.init,
-                 p0=c(0.1,0.1),sigma=c(1,1),N=N.init,D=0.5,p.obs.class=c(0.5,0.5),pi.class=c(0.5,0.5),alpha=c(1,1))
+                 p0=c(0.1,0.1),sigma=c(1,1),N=N.init,D=0.5)
 
 #constants for Nimble
 constants <- list(M=M,J=J,K1D=K1D,xlim=nimbuild$xlim,ylim=nimbuild$ylim,area=area,

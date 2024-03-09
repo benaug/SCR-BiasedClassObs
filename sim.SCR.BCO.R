@@ -40,7 +40,7 @@ sim.SCR.BCO <-
       }
     }
 
-    #discard uncaptured inds and aggregate true IDcovs for all samples, keeping track of where they came from with A matrix (used to put observed data back together)
+    #discard uncaptured inds
     caught <- which(apply(y,c(1),sum)>0)
     y.true <- y
     y <- y[caught,,]

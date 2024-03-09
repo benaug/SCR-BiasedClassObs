@@ -32,6 +32,6 @@ NimModel <- nimbleCode({
   #Or monitor z and Class and compute post-MCMC. I would do the latter.
   for(c in 1:n.class){
     N.class[c] <- sum((z[1:M]==1)*(Class[1:M]==c)) #realized class abundance
-    # E.class[c] <- lambda*pi.class[c] #expected class abundance, easy to compute post-MCMC, not doing it here.
+    # lambda.class[c] <- lambda*pi.class[c] #expected class abundance, easy to compute post-MCMC, not doing it here.
   }
 })

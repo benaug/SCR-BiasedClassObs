@@ -17,10 +17,11 @@ NimModel <- nimbleCode({
     Class[i] ~ dcat(pi.class[1:n.class])
     s[i,1] ~ dunif(xlim[1],xlim[2])
     s[i,2] ~ dunif(ylim[1],ylim[2])
+    #skip pd[i,] and y[i,] calculations when z[i]==0
     pd[i,1:J] <- GetDetectionProb(s=s[i,1:2],X=X[1:J,1:2],J=J,sigma=sigma[Class[i]],p0=p0[Class[i]],z=z[i])
-    y[i,1:J] ~ dBernoulliVector(pd=pd[i,1:J],K1D=K1D[1:J],z=z[i]) #vectorized obs mod
+    y[i,1:J] ~ dBernoulliVector(pd=pd[i,1:J],K1D=K1D[1:J],z=z[i])
   }
-  #Class observation process
+  #Class observation process - could reduce to individual-level data (no trap effects?)
   for(i in 1:n){ #for captured individuals
     for(j in 1:J){
       y.obs.class[i,j] ~ dbinom(size=y[i,j],prob=p.obs.class[Class[i]])

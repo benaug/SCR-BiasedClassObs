@@ -1,6 +1,4 @@
-#------------------------------------------------------------------
-# Function for calculation detection rate
-#------------------------------------------------------------------
+#get detection probability, but only when z==1
 GetDetectionProb <- nimbleFunction(
   run = function(s = double(1), p0=double(0), sigma=double(0), 
                  X=double(2), J=double(0), z=double(0)){ 
@@ -13,7 +11,7 @@ GetDetectionProb <- nimbleFunction(
     }
   }
 )
-
+#bernoulli observation model that skips calculations when z==0
 dBernoulliVector <- nimbleFunction(
   run = function(x = double(1), pd = double(1), K1D = double(1), z = double(0),
                  log = integer(0)) {
